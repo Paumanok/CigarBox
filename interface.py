@@ -52,7 +52,7 @@ class weather:
         try:
             signal.alarm(10)
             self.weather_data = weatherfetch.get_weather()
-        except Alarm:
+        except Exception:
             print("url fetch timed out")
         finally:
             signal.signal(signal.SIGALRM, old_alarm)
@@ -69,7 +69,9 @@ class weather:
 
 
 class ipclock:
-    ipaddr_cmd = "ip addr show wlan0 | grep  'inet ' | awk '{print $2}' | cut -d/ -f1"
+
+    net_iface = "eth0"
+    ipaddr_cmd = "ip addr show " + net_iface +" | grep  'inet ' | awk '{print $2}' | cut -d/ -f1"
     ipaddr = ""
 
     def run_cmd(self):
@@ -105,6 +107,7 @@ def page_two():
 
 
 def main():
+    sleep(15)
     Weather = weather()
     clock = ipclock()
     weather.init(Weather)
